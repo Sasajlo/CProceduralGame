@@ -76,7 +76,7 @@ void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 GLfloat* generateChunk(Mesh* mesh, float* offset, TerrainBrush* terrainBrush) {
     // Random seed
     long seed = rand();
-    GLfloat* heightMap = generateHeightMap(CHUNK_WIDTH, CHUNK_LENGTH, 150, seed, 0.01, 5, offset);
+    GLfloat* heightMap = generateHeightMap(CHUNK_WIDTH, CHUNK_LENGTH, 150, seed, 0.01, 10, offset);
     heightMap = erodeHeightMap(heightMap, CHUNK_WIDTH, CHUNK_LENGTH, terrainBrush);
     mesh = applyHeightMap(mesh, heightMap);
     updateNormals(mesh);
