@@ -84,6 +84,8 @@
     <None Include="freetype.dll" />
     <None Include="shaders\text.frag" />
     <None Include="shaders\text.vert" />
+    <None Include="glfw3.dll" />
+    <None Include="glew32.dll" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="images\water_refraction.png">

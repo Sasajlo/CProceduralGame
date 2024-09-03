@@ -156,6 +156,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="freetype.dll" />
+    <None Include="glew32.dll" />
+    <None Include="glfw3.dll" />
     <None Include="shaders\button.frag" />
     <None Include="shaders\button.vert" />
     <None Include="shaders\terrain.frag" />
