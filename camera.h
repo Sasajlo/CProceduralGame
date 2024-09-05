@@ -4,7 +4,7 @@
 
 typedef struct {
 	GLfloat* position;
-	float* rotation;
+	float* targetRotation;
 	float* targetLocation;
 	float* targetOffset;
 	float fov;
@@ -12,7 +12,7 @@ typedef struct {
 	float near;
 	float far;
 	float view[16];
-	float projection[16];
+	float perspective[16];
 } Camera;
 
 Camera* createCamera(float* targetLocation, float* targetOffset, float fov, float aspect, float near, float far);

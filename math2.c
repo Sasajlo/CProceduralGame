@@ -69,7 +69,7 @@ void setModelMatrix(float translation[3], float rotation[3], float scale[3], flo
     matrix[15] = 1.0f;
 }
 
-void lookAt(float* viewMatrix, const float* eye, const float* center, const float* down) {
+void setViewMatrix(float* viewMatrix, const float* eye, const float* center) {
     float forward[3], right[3], upVector[3];
 
     // Calculate forward vector (direction from eye to center)
@@ -83,7 +83,8 @@ void lookAt(float* viewMatrix, const float* eye, const float* center, const floa
     forward[1] = -forward[1];
     forward[2] = -forward[2];
 
-    // Calculate right vector (cross product of up and forward vectors)
+    // Calculate right vector (cross product of down and forward vectors)
+    float down[] = { 0.0f, -1.0f, 0.0f };
     crossProduct(right, down, forward);
     normalize(right);
 
@@ -110,11 +111,6 @@ void lookAt(float* viewMatrix, const float* eye, const float* center, const floa
     viewMatrix[13] = -dotProduct(upVector, eye);
     viewMatrix[14] = -dotProduct(forward, eye);
     viewMatrix[15] = 1.0f;
-}
-
-void updateViewMatrix(float* viewMatrix, float eye[3], float forward[3], float up[3]) {
-    float center[] = { eye[0] + forward[0], eye[1] + forward[1], eye[2] + forward[2] };
-    lookAt(viewMatrix, eye, center, up);
 }
 
 void setPerspectiveMatrix(float fov, float aspect, float near, float far, float* matrix) {

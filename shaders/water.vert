@@ -10,7 +10,7 @@ out vec3 fromLightVector;
 
 uniform mat4 model;
 uniform mat4 view;
-uniform mat4 projection;
+uniform mat4 perspective;
 uniform vec3 cameraPosition;
 
 uniform float time;
@@ -27,7 +27,7 @@ void main()
     float wave = sin(position.x * waveFrequency + time) * waveAmplitude;
 
     vec4 worldPosition = model * vec4(position.x, 0.0, position.z, 1.0);
-    clipSpace = projection * view * worldPosition;
+    clipSpace = perspective * view * worldPosition;
     gl_Position = clipSpace;
 
     TexCoord = texCoord * tiling;

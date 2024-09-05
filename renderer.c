@@ -85,19 +85,13 @@ void renderMesh(Renderer* renderer, float* model, Camera* camera, float* clipPla
     GLint viewLoc = glGetUniformLocation(renderer->shader->program, "view");
     glUniformMatrix4fv(viewLoc, 1, GL_FALSE, camera->view);
 
-    GLint projLoc = glGetUniformLocation(renderer->shader->program, "projection");
-    glUniformMatrix4fv(projLoc, 1, GL_FALSE, camera->projection);
+    GLint projLoc = glGetUniformLocation(renderer->shader->program, "perspective");
+    glUniformMatrix4fv(projLoc, 1, GL_FALSE, camera->perspective);
 
     glBindVertexArray(renderer->vao);
 
     GLint modelLoc = glGetUniformLocation(renderer->shader->program, "model");
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, model);
-
-    viewLoc = glGetUniformLocation(renderer->shader->program, "view");
-    glUniformMatrix4fv(viewLoc, 1, GL_FALSE, camera->view);
-
-    projLoc = glGetUniformLocation(renderer->shader->program, "projection");
-    glUniformMatrix4fv(projLoc, 1, GL_FALSE, camera->projection);
 
     GLint cameraPositionLoc = glGetUniformLocation(renderer->shader->program, "cameraPosition");
     glUniform3fv(cameraPositionLoc, 1, camera->position); 

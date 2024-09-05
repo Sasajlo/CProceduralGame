@@ -1,5 +1,5 @@
-﻿#include <GL/glew.h>
-#include <GLFW/glfw3.h>
+﻿#include <GL/glew.h> // OpenGL
+#include <GLFW/glfw3.h> // Window and input
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -7,7 +7,7 @@
 #include <math.h>
 #include <stdbool.h>
 #include <ft2build.h>
-#include <freetype/freetype.h>    
+#include <freetype/freetype.h> // Fonts
 
 #include "util.h"
 #include "math2.h"
@@ -18,10 +18,10 @@
 #include "camera.h"
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+#include "stb_image.h" // Images
 
-static float MOVE_SPEED = 2;
-static float ROTATE_SPEED = 20;
+#define MOVE_SPEED 2.0f
+#define ROTATE_SPEED 40.0f
 
 #define WIDTH  1280
 #define HEIGHT 720
@@ -31,15 +31,11 @@ static float ROTATE_SPEED = 20;
 
 int FPS;
 
+// Mouse
 float mousePosition[2];
 bool mouseButtonsPressed[2];
 
-void cursorPositionCallback(GLFWwindow* window, double xpos, double ypos)
-{
-    mousePosition[0] = xpos;
-    mousePosition[1] = HEIGHT - ypos;
-}
-
+// Font character structure
 typedef struct {
     GLuint TextureID;   // ID handle of the glyph texture
     int Size[2];        // Size of glyph
@@ -48,8 +44,15 @@ typedef struct {
 } Character;
 
 Character Characters[128];
-GLuint VAO, VBO;
 
+// Mouse movement interupt
+void cursorPositionCallback(GLFWwindow* window, double xpos, double ypos)
+{
+    mousePosition[0] = xpos;
+    mousePosition[1] = HEIGHT - ypos;
+}
+
+// Mouse button click interupt
 void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 {
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
@@ -82,15 +85,16 @@ GLfloat* generateChunk(Mesh* mesh, float* offset, TerrainBrush* terrainBrush) {
     updateNormals(mesh);
     return heightMap;
 }
-void RenderText(Renderer* renderer, Character* characters, GLuint vao, GLuint vbo, char* text, float x, float y, float scale)
+
+void RenderText(Shader* shader, Character* characters, GLuint vao, GLuint vbo, char* text, float x, float y, float scale)
 {
     // Activate corresponding render state    
-    glUseProgram(renderer->shader->program);
-    glActiveTexture(GL_TEXTURE0);
+    glUseProgram(shader->program);
     glBindVertexArray(vao);
+    glActiveTexture(GL_TEXTURE0);
 
-    GLint reflectionTextureLoc = glGetUniformLocation(renderer->shader->program, "mainTexture");
-    glUniform1i(reflectionTextureLoc, 0);
+    GLint reflectionTextureLoc = glGetUniformLocation(shader->program, "mainTexture");
+    glUniform1i(reflectionTextureLoc, GL_TEXTURE0);
 
     // Iterate through all characters
     for (const char* c = text; *c; c++)
@@ -98,16 +102,16 @@ void RenderText(Renderer* renderer, Character* characters, GLuint vao, GLuint vb
         Character ch = Characters[(unsigned char)*c];
 
         float xpos = x + ch.Bearing[0] * scale;
-        float ypos = y - (ch.Size[1] - ch.Bearing[1]) * scale;
+        float ypos = y + (ch.Size[1] - ch.Bearing[1]) * scale;
 
         float w = ch.Size[0] * scale;
         float h = ch.Size[1] * scale;
 
-        float xposScaled = xpos / WIDTH * 2.0f - 1.0f;
-        float xposWScaled = (xpos + w) / WIDTH * 2.0f - 1.0f;
+        float xposScaled = xpos / WIDTH * 2.0f - 1.0f; // X coord in screen space (-1, 1)
+        float xposWScaled = (xpos + w) / WIDTH * 2.0f - 1.0f; // X + W in screen space (-1, 1)
 
-        float yposScaled = ypos / HEIGHT * 2.0f - 1.0f;
-        float yposHScaled = (ypos + h) / HEIGHT * 2.0f - 1.0f;
+        float yposScaled = ypos / HEIGHT * 2.0f - 1.0f; // Y coord in screen space (-1, 1)
+        float yposHScaled = (ypos + h) / HEIGHT * 2.0f - 1.0f; // Y + H in screen space (-1, 1)
 
         // Update VBO for each character
         float vertices[6][4] = {
@@ -122,6 +126,7 @@ void RenderText(Renderer* renderer, Character* characters, GLuint vao, GLuint vb
 
         // Render glyph texture over quad
         glBindTexture(GL_TEXTURE_2D, ch.TextureID);
+
         // Update content of VBO memory
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
         glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
@@ -167,6 +172,8 @@ int main()
         return -1;
     }
 
+
+    // Initialize font library
     FT_Library ft;
     if (FT_Init_FreeType(&ft)) {
         fprintf(stderr, "Could not init FreeType Library\n");
@@ -180,8 +187,9 @@ int main()
     }
 
 
-    FT_Set_Pixel_Sizes(face, 0, 48);  // Set the size to load glyphs as 48x48 pixels
+    FT_Set_Pixel_Sizes(face, 0, 48);  // Set the size to load glyphs as 48 pixels
 
+    // Text vertices
     GLuint textVao;
     glGenVertexArrays(1, &textVao);
     glBindVertexArray(textVao);
@@ -195,8 +203,7 @@ int main()
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-
-    // Load fps text to texture
+    // Load fonts
     for (unsigned char c = 0; c < 128; c++) {
         // Load character glyph 
         if (FT_Load_Char(face, c, FT_LOAD_RENDER)) {
@@ -303,10 +310,6 @@ int main()
         printf("Failed to load texture\n");
         exit(1);
     }
-
-
-    glfwSetCursorPosCallback(window, cursorPositionCallback);
-    glfwSetMouseButtonCallback(window, mouseButtonCallback);
     
     // Reflectin frame buffer
     GLuint reflectionFbo;
@@ -423,9 +426,10 @@ int main()
 
     Renderer* buttonRenderer = createRenderer(buttonMesh, buttonShader, &buttonTexture, 1);
 
-    Mesh* textMesh = generateQuadMesh();
     Shader* textShader = createShader("shaders/text.vert", "shaders/text.frag");
-    Renderer* textRenderer = createRenderer(textMesh, textShader, 0, 0);
+
+    glfwSetCursorPosCallback(window, cursorPositionCallback);
+    glfwSetMouseButtonCallback(window, mouseButtonCallback);
 
     // Set render mode
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -483,11 +487,11 @@ int main()
 
         // Process input
         if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
-            camera->rotation[1] -= ROTATE_SPEED * deltaTime;
+            camera->targetRotation[1] -= ROTATE_SPEED * deltaTime;
         if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
-            camera->rotation[1] += ROTATE_SPEED * deltaTime;
+            camera->targetRotation[1] += ROTATE_SPEED * deltaTime;
 
-        float radians = toRadians(camera->rotation[1]);
+        float radians = toRadians(camera->targetRotation[1]);
 
         float forwardX = cosf(radians);
         float forwardZ = sinf(radians);
@@ -573,7 +577,7 @@ int main()
 
         // Render objects
          
-        // Enable depth testing
+        // Enable transparency
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 
@@ -583,6 +587,7 @@ int main()
         glClearColor(0.0f, 0.7f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        // Render only above water
         float reflectionClipPlane[] = { 0.0f, 1.0f, 0.0f, -waterTranslation[1] };
 
         camera->targetOffset[1] *= -1;
@@ -594,6 +599,7 @@ int main()
         // REFRACTION
         glBindFramebuffer(GL_FRAMEBUFFER, refractionFbo);
 
+        // Render only under water
         float refractionClipPlane[] = { 0.0f, -1.0f, 0.0f, waterTranslation[1] };
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -609,11 +615,11 @@ int main()
 
         glDisable(GL_DEPTH_TEST);
         renderUI(buttonRenderer, buttonPosition, buttonScale);
-        float textColor[] = { 1.0f, 1.0f, 1.0f };
+
         char fpsString[16];
         sprintf_s(fpsString, 16, "FPS:%d", FPS);
-        RenderText(textRenderer, Characters, textVao, textVbo, fpsString, 10.0f, 660.0f, 1.0f);
-        RenderText(textRenderer, Characters, textVao, textVbo, "REGENERATE", 1170.0f, 630.0f, 0.3f);
+        RenderText(textShader, Characters, textVao, textVbo, fpsString, 10.0f, 660.0f, 1.0f);
+        RenderText(textShader, Characters, textVao, textVbo, "REGENERATE", 1170.0f, 630.0f, 0.3f);
 
         // Swap front and back buffers
         glfwSwapBuffers(window);

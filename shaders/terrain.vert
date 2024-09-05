@@ -10,7 +10,7 @@ out vec3 Normal;
 
 uniform mat4 model;
 uniform mat4 view;
-uniform mat4 projection;
+uniform mat4 perspective;
 
 uniform vec4 clipPlane;
 
@@ -31,7 +31,7 @@ void main()
 
     const vec4 worldLocation = model * vec4(position, 1.0);
 
-    gl_ClipDistance[0] = dot(worldLocation, clipPlane);
+    gl_ClipDistance[0] = dot(worldLocation, clipPlane); // Should vertex render or not (under or above water?)
 
     if (h < 0.2)
         Color = vec3(0.0, 0.0, 1.0);  // Deep ocean
@@ -55,5 +55,5 @@ void main()
 
     TexCoord = texCoord;
 
-    gl_Position = projection * view * worldLocation;
+    gl_Position = perspective * view * model * vec4(position, 1.0);
 }

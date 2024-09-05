@@ -24,6 +24,6 @@ void main()
     vec3 diffuse = diff * lightColor * Color;
 
     // Set the output color
-    FragColor = vec4(diffuse, 1.0);
+    gl_FragColor = vec4(diffuse, 1.0);
     //FragColor = texture(texture1, TexCoord);
 }
