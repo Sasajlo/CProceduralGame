@@ -134,42 +134,65 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="camera.c" />
+    <ClCompile Include="component.c" />
+    <ClCompile Include="engine.c" />
+    <ClCompile Include="game_object.c" />
+    <ClCompile Include="input_manager.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="math2.c" />
-    <ClCompile Include="mesh.c" />
-    <ClCompile Include="noise.c" />
-    <ClCompile Include="renderer.c" />
-    <ClCompile Include="shader.c" />
-    <ClCompile Include="terrain.c" />
+    <ClCompile Include="mesh_component.c" />
+    <ClCompile Include="player_component.c" />
+    <ClCompile Include="renderer_component.c" />
+    <ClCompile Include="scene.c" />
+    <ClCompile Include="shader_component.c" />
+    <ClCompile Include="texture_component.c" />
+    <ClCompile Include="transform_component.c" />
     <ClCompile Include="util.c" />
+    <ClCompile Include="window.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h" />
+    <ClInclude Include="common.h" />
+    <ClInclude Include="component.h" />
+    <ClInclude Include="engine.h" />
+    <ClInclude Include="game_object.h" />
+    <ClInclude Include="input_manager.h" />
     <ClInclude Include="math2.h" />
-    <ClInclude Include="mesh.h" />
-    <ClInclude Include="noise.h" />
-    <ClInclude Include="renderer.h" />
-    <ClInclude Include="shader.h" />
+    <ClInclude Include="mesh_component.h" />
+    <ClInclude Include="player_component.h" />
+    <ClInclude Include="renderer_component.h" />
+    <ClInclude Include="scene.h" />
+    <ClInclude Include="shader_component.h" />
     <ClInclude Include="stb_image.h" />
-    <ClInclude Include="terrain.h" />
-    <ClInclude Include="texture.h" />
+    <ClInclude Include="texture_component.h" />
+    <ClInclude Include="transform_component.h" />
     <ClInclude Include="util.h" />
+    <ClInclude Include="window.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="cpp.hint" />
     <None Include="freetype.dll" />
     <None Include="glew32.dll" />
     <None Include="glfw3.dll" />
-    <None Include="shaders\button.frag" />
-    <None Include="shaders\button.vert" />
-    <None Include="shaders\terrain.frag" />
-    <None Include="shaders\terrain.vert" />
-    <None Include="shaders\text.frag" />
-    <None Include="shaders\text.vert" />
-    <None Include="shaders\water.frag" />
-    <None Include="shaders\water.vert" />
+    <None Include="shaders\mesh.frag" />
+    <None Include="shaders\mesh.vert" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\..\..\Downloads\Beginning-Cpp-Game-Programming-Second-Edition-master\Beginning-Cpp-Game-Programming-Second-Edition-master\Chapter08\graphics\player.png" />
+    <Image Include="..\..\..\Downloads\Beginning-Cpp-Game-Programming-Second-Edition-master\Beginning-Cpp-Game-Programming-Second-Edition-master\Chapter08\graphics\sample.png" />
+    <Image Include="images\ammo_icon.png" />
+    <Image Include="images\ammo_pickup.png" />
+    <Image Include="images\background.png" />
+    <Image Include="images\background_sheet.png" />
+    <Image Include="images\bloater.png" />
+    <Image Include="images\blood.png" />
+    <Image Include="images\chaser.png" />
+    <Image Include="images\crawler.png" />
+    <Image Include="images\crosshair.png" />
+    <Image Include="images\health_pickup.png" />
+    <Image Include="images\player.png" />
     <Image Include="images\reload.png" />
+    <Image Include="images\sample.png" />
     <Image Include="images\water_du_dv.png" />
     <Image Include="images\water_normals.png" />
     <Image Include="images\water_refraction.png" />

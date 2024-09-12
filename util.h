@@ -1,5 +1,7 @@
 #pragma once
 
-char* readFileToString(const char* filename);
+#include "common.h"
 
-long getTime();
+char* ReadFileToString(const char* filename);
+
+ulong GetTime();

@@ -1,35 +1,63 @@
+
 #include "camera.h"
+#include "game_object.h"
+#include "transform_component.h"
 
-#include <stdlib.h>
-
-#include "math2.h"
-
-Camera* createCamera(float* targetLocation, float* targetOffset, float fov, float aspect, float near, float far)
+struct Camera 
 {
-    Camera* camera = (Camera*)malloc(sizeof(Camera));
-    camera->position = calloc(3, sizeof(float));
-    camera->targetRotation = calloc(3, sizeof(float));
-    camera->targetLocation = targetLocation;
-    camera->targetOffset = targetOffset;
-    camera->fov = fov;
-    camera->aspect = aspect;
-    camera->near = near;
-    camera->far = far;
-    setPerspectiveMatrix(fov, aspect, near, far, camera->perspective);
-    updateCamera(camera);
-    return camera;
+	float position[3];
+	GameObject* target;
+};
+
+Camera* CreateCamera()
+{
+	Camera* camera = malloc(sizeof(Camera));
+	if (camera == NULL) 
+	{
+		fprintf(stderr, "[Error] Failed to create camera");
+		exit(1);
+	}
+	camera->target = NULL;
+	camera->position[0] = 0.0f;
+	camera->position[1] = 0.0f;
+	camera->position[2] = 0.0f;
+
+	return camera;
 }
 
-void updateCamera(Camera* camera)
+void SetCameraTarget(Camera* camera, GameObject* target)
 {
-    float rotatedOffset[3];
-    rotateOffset(camera->targetOffset, camera->targetRotation[0], camera->targetRotation[1], rotatedOffset);
+	camera->target = target;
+}
 
-    // Update camera position
-    camera->position[0] = camera->targetLocation[0] + rotatedOffset[0];
-    camera->position[1] = camera->targetLocation[1] + rotatedOffset[1];
-    camera->position[2] = camera->targetLocation[2] + rotatedOffset[2];
+void UpdateCamera(Camera* camera)
+{
+	if (camera == NULL)
+		return;
 
-    // Update the view matrix
-    setViewMatrix(camera->view, camera->position, camera->targetLocation);
+	if (camera->target == NULL)
+		return;
+
+	Component* transformComponent = GetComponent(camera->target, "Transform");
+	if (transformComponent == NULL)
+		return;
+
+	float* targetPosition = GetPosition(transformComponent);
+	camera->position[0] = targetPosition[0];
+	camera->position[1] = targetPosition[1];
+	camera->position[2] = targetPosition[2];
+}
+
+float* GetCameraPosition(Camera* camera)
+{
+	return camera->position;
+}
+
+void CleanCamera(Camera* camera)
+{
+	if (camera == NULL)
+		return; // Nothing to clean
+
+	// Free camera
+	free(camera);
 }

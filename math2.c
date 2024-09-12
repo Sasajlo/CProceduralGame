@@ -2,12 +2,12 @@
 
 #include <math.h>
 
-float toRadians(float degrees)
+float ToRadians(float degrees)
 {
     return degrees * (PI / 180.0f);
 }
 
-void normalize(float* v) {
+void Normalize(float* v) {
     float length = sqrtf(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
     if (length != 0.0f) {
         v[0] /= length;
@@ -16,21 +16,21 @@ void normalize(float* v) {
     }
 }
 
-void crossProduct(float* result, const float* a, const float* b) {
+void CrossProduct(float* result, const float* a, const float* b) {
     result[0] = a[1] * b[2] - a[2] * b[1];
     result[1] = a[2] * b[0] - a[0] * b[2];
     result[2] = a[0] * b[1] - a[1] * b[0];
 }
 
-float dotProduct(const float* a, const float* b) {
+float DotProduct(const float* a, const float* b) {
     return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
 }
 
-void setModelMatrix(float translation[3], float rotation[3], float scale[3], float* matrix) {
+void CreateModelMatrix(float position[3], float rotation[3], float scale[3], float* matrix) {
     // Translation matrix
-    float tx = translation[0];
-    float ty = translation[1];
-    float tz = translation[2];
+    float tx = position[0];
+    float ty = position[1];
+    float tz = position[2];
 
     // Rotation angles (in radians)
     float xRadians = rotation[0] * (PI / 180.0f);
@@ -69,49 +69,57 @@ void setModelMatrix(float translation[3], float rotation[3], float scale[3], flo
     matrix[15] = 1.0f;
 }
 
-void setViewMatrix(float* viewMatrix, const float* eye, const float* center) {
-    float forward[3], right[3], upVector[3];
-
-    // Calculate forward vector (direction from eye to center)
-    forward[0] = center[0] - eye[0];
-    forward[1] = center[1] - eye[1];
-    forward[2] = center[2] - eye[2];
-    normalize(forward);
-
-    // Invert the forward vector to align with the camera's viewing direction
-    forward[0] = -forward[0];
-    forward[1] = -forward[1];
-    forward[2] = -forward[2];
-
-    // Calculate right vector (cross product of down and forward vectors)
-    float down[] = { 0.0f, -1.0f, 0.0f };
-    crossProduct(right, down, forward);
-    normalize(right);
-
-    // Calculate the corrected up vector (cross product of forward and right vectors)
-    crossProduct(upVector, forward, right);
-
-    // Set up the view matrix
-    viewMatrix[0] = right[0];
-    viewMatrix[1] = upVector[0];
-    viewMatrix[2] = forward[0];
-    viewMatrix[3] = 0.0f;
-
-    viewMatrix[4] = right[1];
-    viewMatrix[5] = upVector[1];
-    viewMatrix[6] = forward[1];
-    viewMatrix[7] = 0.0f;
-
-    viewMatrix[8] = right[2];
-    viewMatrix[9] = upVector[2];
-    viewMatrix[10] = forward[2];
-    viewMatrix[11] = 0.0f;
-
-    viewMatrix[12] = -dotProduct(right, eye);
-    viewMatrix[13] = -dotProduct(upVector, eye);
-    viewMatrix[14] = -dotProduct(forward, eye);
-    viewMatrix[15] = 1.0f;
+void Create2DViewMatrix(float x, float y, float* matrix) {
+    matrix[0] = 1.0f;   matrix[4] = 0.0f;   matrix[8] = 0.0f;   matrix[12] = -x;
+    matrix[1] = 0.0f;   matrix[5] = 1.0f;   matrix[9] = 0.0f;   matrix[13] = -y;
+    matrix[2] = 0.0f;   matrix[6] = 0.0f;   matrix[10] = 1.0f;   matrix[14] = 0.0f;
+    matrix[3] = 0.0f;   matrix[7] = 0.0f;   matrix[11] = 0.0f;   matrix[15] = 1.0f;
 }
+
+//void setViewMatrix(float* viewMatrix, const float* eye, const float* center) {
+//    float forward[3], right[3], upVector[3];
+//
+//    // Calculate forward vector (direction from eye to center)
+//    forward[0] = center[0] - eye[0];
+//    forward[1] = center[1] - eye[1];
+//    forward[2] = center[2] - eye[2];
+//    normalize(forward);
+//
+//    // Invert the forward vector to align with the camera's viewing direction
+//    forward[0] = -forward[0];
+//    forward[1] = -forward[1];
+//    forward[2] = -forward[2];
+//
+//    // Calculate right vector (cross product of down and forward vectors)
+//    float down[] = { 0.0f, -1.0f, 0.0f };
+//    crossProduct(right, down, forward);
+//    normalize(right);
+//
+//    // Calculate the corrected up vector (cross product of forward and right vectors)
+//    crossProduct(upVector, forward, right);
+//
+//    // Set up the view matrix
+//    viewMatrix[0] = right[0];
+//    viewMatrix[1] = upVector[0];
+//    viewMatrix[2] = forward[0];
+//    viewMatrix[3] = 0.0f;
+//
+//    viewMatrix[4] = right[1];
+//    viewMatrix[5] = upVector[1];
+//    viewMatrix[6] = forward[1];
+//    viewMatrix[7] = 0.0f;
+//
+//    viewMatrix[8] = right[2];
+//    viewMatrix[9] = upVector[2];
+//    viewMatrix[10] = forward[2];
+//    viewMatrix[11] = 0.0f;
+//
+//    viewMatrix[12] = -dotProduct(right, eye);
+//    viewMatrix[13] = -dotProduct(upVector, eye);
+//    viewMatrix[14] = -dotProduct(forward, eye);
+//    viewMatrix[15] = 1.0f;
+//}
+//
 
 void setPerspectiveMatrix(float fov, float aspect, float near, float far, float* matrix) {
     float tanHalfFov = tanf(fov / 2.0f);
@@ -138,26 +146,27 @@ void setPerspectiveMatrix(float fov, float aspect, float near, float far, float*
     matrix[15] = 0.0f;
 }
 
-void rotateOffset(float* offset, float xAngle, float yAngle, float* resultOffset) {
-    // Extract initial offset values
-    float offsetX = offset[0];
-    float offsetY = offset[1];
-    float offsetZ = offset[2];
-
-    // Rotation around the X-axis (pitch)
-    float pitchRadians = xAngle * (PI / 180.0f);
-    float cosPitch = cosf(pitchRadians);
-    float sinPitch = sinf(pitchRadians);
-
-    float rotatedY = offsetY * cosPitch - offsetZ * sinPitch;
-    float rotatedZ = offsetY * sinPitch + offsetZ * cosPitch;
-
-    // Rotation around the Y-axis (yaw)
-    float yawRadians = yAngle * (PI / 180.0f);
-    float cosYaw = cosf(yawRadians);
-    float sinYaw = sinf(yawRadians);
-
-    resultOffset[0] = offsetX * cosYaw + rotatedZ * sinYaw;
-    resultOffset[1] = rotatedY;
-    resultOffset[2] = -offsetX * sinYaw + rotatedZ * cosYaw;
-}
+//
+//void rotateOffset(float* offset, float xAngle, float yAngle, float* resultOffset) {
+//    // Extract initial offset values
+//    float offsetX = offset[0];
+//    float offsetY = offset[1];
+//    float offsetZ = offset[2];
+//
+//    // Rotation around the X-axis (pitch)
+//    float pitchRadians = xAngle * (PI / 180.0f);
+//    float cosPitch = cosf(pitchRadians);
+//    float sinPitch = sinf(pitchRadians);
+//
+//    float rotatedY = offsetY * cosPitch - offsetZ * sinPitch;
+//    float rotatedZ = offsetY * sinPitch + offsetZ * cosPitch;
+//
+//    // Rotation around the Y-axis (yaw)
+//    float yawRadians = yAngle * (PI / 180.0f);
+//    float cosYaw = cosf(yawRadians);
+//    float sinYaw = sinf(yawRadians);
+//
+//    resultOffset[0] = offsetX * cosYaw + rotatedZ * sinYaw;
+//    resultOffset[1] = rotatedY;
+//    resultOffset[2] = -offsetX * sinYaw + rotatedZ * cosYaw;
+//}

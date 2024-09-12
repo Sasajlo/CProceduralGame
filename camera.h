@@ -1,19 +1,12 @@
 #pragma once
 
-#include <GL/glew.h>
+#include "common.h"
+#include "game_object.h"
 
-typedef struct {
-	GLfloat* position;
-	float* targetRotation;
-	float* targetLocation;
-	float* targetOffset;
-	float fov;
-	float aspect;
-	float near;
-	float far;
-	float view[16];
-	float perspective[16];
-} Camera;
+typedef struct Camera Camera;
 
-Camera* createCamera(float* targetLocation, float* targetOffset, float fov, float aspect, float near, float far);
-void updateCamera(Camera* camera);
+Camera* CreateCamera();
+void SetCameraTarget(Camera* camera, GameObject* target);
+void UpdateCamera(Camera* camera);
+float* GetCameraPosition(Camera* camera);
+void CleanCamera(Camera* camera);

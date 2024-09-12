@@ -18,77 +18,112 @@
     <ClCompile Include="main.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="noise.c">
+    <ClCompile Include="engine.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="terrain.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="shader.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="util.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="mesh.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="renderer.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="math2.c">
+    <ClCompile Include="scene.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="camera.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="game_object.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="player_component.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="window.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="component.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="util.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="renderer_component.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mesh_component.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="shader_component.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="math2.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="transform_component.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="input_manager.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="texture_component.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="noise.h">
+    <ClInclude Include="stb_image.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="terrain.h">
+    <ClInclude Include="common.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="util.h">
+    <ClInclude Include="engine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="shader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="mesh.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="renderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="math2.h">
+    <ClInclude Include="scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="stb_image.h">
+    <ClInclude Include="game_object.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="texture.h">
+    <ClInclude Include="component.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="player_component.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="window.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="util.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="renderer_component.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mesh_component.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="shader_component.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="math2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="transform_component.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="input_manager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="texture_component.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\terrain.frag" />
-    <None Include="shaders\water.frag" />
-    <None Include="shaders\water.vert" />
-    <None Include="shaders\terrain.vert">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="shaders\button.frag" />
-    <None Include="shaders\button.vert" />
     <None Include="freetype.dll" />
-    <None Include="shaders\text.frag" />
-    <None Include="shaders\text.vert" />
     <None Include="glfw3.dll" />
     <None Include="glew32.dll" />
+    <None Include="cpp.hint" />
+    <None Include="shaders\mesh.vert" />
+    <None Include="shaders\mesh.frag" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="images\water_refraction.png">
@@ -101,6 +136,48 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="images\water_normals.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\..\Downloads\Beginning-Cpp-Game-Programming-Second-Edition-master\Beginning-Cpp-Game-Programming-Second-Edition-master\Chapter08\graphics\player.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\..\Downloads\Beginning-Cpp-Game-Programming-Second-Edition-master\Beginning-Cpp-Game-Programming-Second-Edition-master\Chapter08\graphics\sample.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\ammo_icon.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\ammo_pickup.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\background.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\background_sheet.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\bloater.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\blood.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\chaser.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\crawler.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\crosshair.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\health_pickup.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\player.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\sample.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

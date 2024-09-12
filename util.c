@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-char* readFileToString(const char* filename) {
+char* ReadFileToString(const char* filename) {
     // Open the file in binary mode to ensure no line-ending conversion happens
     FILE* file = fopen(filename, "rb");
     if (file == NULL) {
@@ -43,13 +43,13 @@ char* readFileToString(const char* filename) {
     return buffer;
 }
 
-long getTime()
+ulong GetTime()
 {
     // Get the number of clock ticks since the program started
     clock_t ticks = clock();
 
     // Convert clock ticks to milliseconds
-    long milliseconds = (ticks * 1000) / CLOCKS_PER_SEC;
+    ulong milliseconds = (ticks * 1000) / CLOCKS_PER_SEC;
 
     return milliseconds;
 }
