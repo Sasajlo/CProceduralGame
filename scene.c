@@ -63,6 +63,7 @@ void AddObjectToScene(Scene* scene, GameObject* gameObject)
 void StartScene(Scene* scene)
 {
 	// Start camera
+	//UpdateCamera(GetMainCamera(), 1.0f);
 	
 	// Start each game object
 	ObjectListElement* current = scene->objects;
@@ -84,7 +85,7 @@ void UpdateScene(Scene* scene, float deltaTime)
 	}
 
 	// Update camera
-	UpdateCamera(GetMainCamera());
+	UpdateCamera(GetMainCamera(), deltaTime);
 }
 
 void RenderScene(Scene* scene, Window* window)

@@ -76,6 +76,19 @@ void Create2DViewMatrix(float x, float y, float* matrix) {
     matrix[3] = 0.0f;   matrix[7] = 0.0f;   matrix[11] = 0.0f;   matrix[15] = 1.0f;
 }
 
+void Create2DProjectionMatrix(float aspect, float* matrix)
+{
+    matrix[0] = 1.0f / aspect;   matrix[4] = 0.0f;   matrix[8] = 0.0f;   matrix[12] = 0.0f;
+    matrix[1] = 0.0f;   matrix[5] = 1.0f;   matrix[9] = 0.0f;   matrix[13] = 0.0f;
+    matrix[2] = 0.0f;   matrix[6] = 0.0f;   matrix[10] = 1.0f;   matrix[14] = 0.0f;
+    matrix[3] = 0.0f;   matrix[7] = 0.0f;   matrix[11] = 0.0f;   matrix[15] = 1.0f;
+}
+
+float Lerp(float a, float b, float t)
+{
+    return a + t * (b - a);
+}
+
 //void setViewMatrix(float* viewMatrix, const float* eye, const float* center) {
 //    float forward[3], right[3], upVector[3];
 //
@@ -121,30 +134,30 @@ void Create2DViewMatrix(float x, float y, float* matrix) {
 //}
 //
 
-void setPerspectiveMatrix(float fov, float aspect, float near, float far, float* matrix) {
-    float tanHalfFov = tanf(fov / 2.0f);
-    float range = near - far;
-
-    matrix[0] = 1.0f / (aspect * tanHalfFov);
-    matrix[1] = 0.0f;
-    matrix[2] = 0.0f;
-    matrix[3] = 0.0f;
-
-    matrix[4] = 0.0f;
-    matrix[5] = 1.0f / tanHalfFov;
-    matrix[6] = 0.0f;
-    matrix[7] = 0.0f;
-
-    matrix[8] = 0.0f;
-    matrix[9] = 0.0f;
-    matrix[10] = (near + far) / range;
-    matrix[11] = -1.0f;
-
-    matrix[12] = 0.0f;
-    matrix[13] = 0.0f;
-    matrix[14] = (2.0f * near * far) / range;
-    matrix[15] = 0.0f;
-}
+//void setPerspectiveMatrix(float fov, float aspect, float near, float far, float* matrix) {
+//    float tanHalfFov = tanf(fov / 2.0f);
+//    float range = near - far;
+//
+//    matrix[0] = 1.0f / (aspect * tanHalfFov);
+//    matrix[1] = 0.0f;
+//    matrix[2] = 0.0f;
+//    matrix[3] = 0.0f;
+//
+//    matrix[4] = 0.0f;
+//    matrix[5] = 1.0f / tanHalfFov;
+//    matrix[6] = 0.0f;
+//    matrix[7] = 0.0f;
+//
+//    matrix[8] = 0.0f;
+//    matrix[9] = 0.0f;
+//    matrix[10] = (near + far) / range;
+//    matrix[11] = -1.0f;
+//
+//    matrix[12] = 0.0f;
+//    matrix[13] = 0.0f;
+//    matrix[14] = (2.0f * near * far) / range;
+//    matrix[15] = 0.0f;
+//}
 
 //
 //void rotateOffset(float* offset, float xAngle, float yAngle, float* resultOffset) {

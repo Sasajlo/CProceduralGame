@@ -2,6 +2,9 @@
 #include "camera.h"
 #include "game_object.h"
 #include "transform_component.h"
+#include "math2.h"
+
+#define LERP_SPEED 2.5f
 
 struct Camera 
 {
@@ -30,7 +33,7 @@ void SetCameraTarget(Camera* camera, GameObject* target)
 	camera->target = target;
 }
 
-void UpdateCamera(Camera* camera)
+void UpdateCamera(Camera* camera, float deltaTime)
 {
 	if (camera == NULL)
 		return;
@@ -43,9 +46,9 @@ void UpdateCamera(Camera* camera)
 		return;
 
 	float* targetPosition = GetPosition(transformComponent);
-	camera->position[0] = targetPosition[0];
-	camera->position[1] = targetPosition[1];
-	camera->position[2] = targetPosition[2];
+	camera->position[0] = Lerp(camera->position[0], targetPosition[0], LERP_SPEED * deltaTime);
+	camera->position[1] = Lerp(camera->position[1], targetPosition[1], LERP_SPEED * deltaTime);
+	camera->position[2] = Lerp(camera->position[2], targetPosition[2], LERP_SPEED * deltaTime);
 }
 
 float* GetCameraPosition(Camera* camera)

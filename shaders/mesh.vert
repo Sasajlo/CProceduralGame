@@ -6,6 +6,7 @@ in vec2 texCoord;
 
 uniform mat4 model;
 uniform mat4 view;
+uniform mat4 projection;
 uniform int useTexture;
 
 out vec3 Color;
@@ -18,5 +19,5 @@ void main()
     TexCoord = texCoord;
     UseTexture = float(useTexture);
 
-    gl_Position = view * model * vec4(position, 1.0);
+    gl_Position = projection * view * model * vec4(position, 1.0);
 }

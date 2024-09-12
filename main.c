@@ -33,16 +33,6 @@ int main()
 	Component* transformComponent = CreateTransformComponent();
 	AddComponent(playerObject, transformComponent);
 
-	// Set postion
-	float* position = GetPosition(transformComponent);
-	position[0] = -0.8f;
-	position[1] = -0.8f;
-
-	// Set scale
-	float* scale = GetScale(transformComponent);
-	scale[0] = 0.2f;
-	scale[1] = 0.2f;
-
 	// Add mesh component
 	Component* meshComponent = CreateQuadMeshComponent();
 	AddComponent(playerObject, meshComponent);

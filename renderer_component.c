@@ -119,6 +119,13 @@ void RenderMesh(Component* rendererComponent)
     GLint viewLoc = GetUniformLocation(shaderComponent, "view");
     glUniformMatrix4fv(viewLoc, 1, GL_FALSE, view);
 
+    // Calculate 2D projection matrix
+    GLfloat projection[16];
+    Create2DProjectionMatrix(1280.0f / 720.0f , projection);
+
+    GLint projectionLoc = GetUniformLocation(shaderComponent, "projection");
+    glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, projection);
+
     // Draw mesh
     glDrawElements(GL_TRIANGLES, GetIndexCount(meshComponent), GL_UNSIGNED_INT, 0);
 

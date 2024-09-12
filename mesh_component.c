@@ -47,13 +47,16 @@ Component* CreateQuadMeshComponent()
     int vertexIndex = 0;
     int index = 0;
 
-    for (int y = 0; y < height; y++)
+    float halfWidth = (float)(width - 1) * 0.5f;
+    float halfHeight = (float)(height - 1)* 0.5f;
+
+    for (float y = 0; y < height; y++)
     {
         for (int x = 0; x < width; x++)
         {
             // Position
-            meshData->vertices[vertexIndex++] = x;
-            meshData->vertices[vertexIndex++] = y;
+            meshData->vertices[vertexIndex++] = x - halfWidth;
+            meshData->vertices[vertexIndex++] = y - halfHeight;
             meshData->vertices[vertexIndex++] = 0.0f;
 
             // Color

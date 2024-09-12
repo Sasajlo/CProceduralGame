@@ -3,6 +3,8 @@
 #include "input_manager.h"
 #include "util.h"
 
+#include "stb_image.h"
+
 struct Engine 
 {
 	Window* window;
@@ -33,7 +35,7 @@ Engine* CreateEngine(const char* title, int width, int height)
 	engine->isRunning = true;
 
 	InitSceneManager();
-	InitInputManager();
+	InitInputManager(engine->window);
 
     return engine;
 }
@@ -47,6 +49,35 @@ void SetActiveScene(Engine* engine, Scene* scene)
 
 void StartEngine(Engine* engine)
 {
+// ------TEMP----------------------------------------------------------------------------------------------------
+	// Load custom cursor image using stb_image
+	int width, height, channels;
+	unsigned char* image = stbi_load("images/crosshair.png", &width, &height, &channels, 0);
+	if (!image) {
+		printf("Failed to load cursor image\n");
+		glfwTerminate();
+		return -1;
+	}
+
+	// Create GLFWimage structure to hold image data
+	GLFWimage glfw_image;
+	glfw_image.width = width;
+	glfw_image.height = height;
+	glfw_image.pixels = image;
+
+	// Create custom cursor
+	GLFWcursor* cursor = glfwCreateCursor(&glfw_image, 0, 0);  // (0, 0) is the hotspot of the cursor
+	if (!cursor) {
+		printf("Failed to create custom cursor\n");
+		stbi_image_free(image);
+		glfwTerminate();
+		return -1;
+	}
+
+	SetMouseCursor(engine->window, cursor);
+// ------------------------------------------------------------------------------------------------------------
+
+
 	// Randomize
 	srand(GetTime());
 

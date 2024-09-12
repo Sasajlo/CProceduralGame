@@ -1,9 +1,6 @@
 #include "window.h"
 
-#include <GL/glew.h> // OpenGL
-#include <GLFW/glfw3.h> // Window and input
-
-typedef struct Window
+struct Window
 {
     char title[MAX_WINDOW_TITLE_LEN];
     int width;
@@ -88,6 +85,17 @@ void CleanWindow(Window* window)
 
     // Free window
     free(window);
+}
+
+void SetMouseCursor(Window* window, GLFWcursor* cursor)
+{
+    glfwSetCursor(window->window, cursor);
+}
+
+void SetMouseCallbacks(Window* window, GLFWcursorposfun mousePositionCallback, GLFWmousebuttonfun mouseButtonCallback)
+{
+    glfwSetCursorPosCallback(window->window, mousePositionCallback);
+    glfwSetMouseButtonCallback(window->window, mouseButtonCallback);
 }
 
 bool GetKey(Window* window, int keycode)
